@@ -1,10 +1,15 @@
+from dcos_migrate.manifest_list import ManifestList
+
 class MigratePlugin(object):
     """docstring for Migrator."""
+    plugin_name = None
+    backup_depends = []
+    backup_data_depends = []
+    migrate_depends = []
+    migrate_data_ddepends = []
 
-    def __init__(self, migrationPlugins):
-        super(Migrator, self).__init__()
-        self.migrationPlugins = migrationPlugins
-        self.ManifestList = ManifestList()
+    def __init__(self):
+        self.manifest_list = ManifestList()
 
     def backup_metadata(self, arg):
         pass

@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-import pytest
-from dcos_migrate.marathon import MarathonMigrator
+from dcos_migrate.plugins.marathon import MarathonMigrator
 
 
 def test_id_parse():

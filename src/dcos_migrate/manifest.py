@@ -21,7 +21,7 @@ class Manifest(object):
     def findall_by_annotation(self, annotation, value=None):
         rs = []
         for r in self.resources:
-            for a, v in r.metadata.annotations:
+            for a, v in r.metadata.annotations.items():
                 if a == annotation:
                     if value is None:
                         rs.append(r)
