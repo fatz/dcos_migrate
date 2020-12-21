@@ -9,16 +9,16 @@ class MigratePlugin(object):
     migrate_data_ddepends = []
 
     def __init__(self):
-        self.manifest_list = ManifestList()
-
-    def backup_metadata(self, arg):
         pass
 
-    def backup_data(self, arg):
+    def backup(self, DCOSClient, **kwargs):
         pass
 
-    def migrate_metadata(self, arg):
+    def backup_data(self, DCOSClient, **kwargs):
         pass
 
-    def migrate_data(self, arg):
+    def migrate(self, backupList, manifestList, **kwargs):
+        pass
+
+    def migrate_data(self, backupList, manifestList, **kwargs):
         pass
