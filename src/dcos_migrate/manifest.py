@@ -1,4 +1,4 @@
-class Manifest(object):
+class Manifest(list):
     """docstring for Manifest."""
 
     def __init__(self, path):

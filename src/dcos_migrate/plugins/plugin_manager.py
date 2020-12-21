@@ -13,6 +13,12 @@ def is_plugin(object):
 
 
 def get_dependency_batches(plugins, depattr):
+    """
+    [
+        [ Plugin, PlugIn ],
+        [ Plugin ],
+    ]
+    """
     batches = []
     p_deps = dict((p.plugin_name, set(getattr(p, depattr))) for p in plugins.values())
     while p_deps:
@@ -52,6 +58,26 @@ class PluginManager(object):
     def iter_namespace(self):
         return pkgutil.iter_modules(self.plugin_namespace.__path__,
                                     self.plugin_namespace.__name__ + ".")
+
+    @property
+    def backup_batch(self):
+        """list: List of list of tuples plugin name and plugin class."""
+        return self.backup
+
+    @property
+    def backup_data_batch(self):
+        """list: List of tuples plugin name and plugin class."""
+        return self.backup_data
+
+    @property
+    def migrate_batch(self):
+        """list: List of tuples plugin name and plugin class."""
+        return self.migrate
+
+    @property
+    def migrate_data_batch(self):
+        """list: List of tuples plugin name and plugin class."""
+        return self.migrate_data
 
     def discover_modules(self):
         # https://packaging.python.org/guides/creating-and-discovering-plugins/#using-namespace-packages
