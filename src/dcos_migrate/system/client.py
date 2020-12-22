@@ -3,10 +3,10 @@ from urllib.parse import urlparse
 
 
 class DCOSClient(object):
-    """docstring for Config."""
+    """docstring for DCOSClient."""
 
-    def __init__(self):
-        super(Config, self).__init__(toml_config=None)
+    def __init__(self, toml_config=None):
+        super(DCOSClient, self).__init__()
         self.toml_config = toml_config
         if toml_config is None:
             self.toml_config = config.get_config()
@@ -16,25 +16,28 @@ class DCOSClient(object):
 
     @property
     def dcos_url(self):
-        return self._dcos_url
+        return self._dcos_url.geturl()
 
-    def request(method, url, **kwargs):
-        return http.request(method, url, kwargs, toml_config=self.config)
+    def full_dcos_url(self, url_path: str) -> str:
+        return "{dcos}/{url}".format(dcos=self.dcos_url, url=url_path)
 
-    def head(url, **kwargs):
-        return sewlf.request("head", url, kwargs)
+    def request(self, method: str, url: str, **kwargs):
+        return http.request(method, url, toml_config=self.toml_config, **kwargs)
 
-    def get(url, **kwargs):
-        return self.request("get", url, kwargs)
+    def head(self, url: str, **kwargs):
+        return sewlf.request("head", url, **kwargs)
 
-    def post(url, data=None, json=None, **kwargs):
-        return self.request("port", url, kwargs, data=data, json=json)
+    def get(self, url: str, **kwargs):
+        return self.request("get", url, **kwargs)
 
-    def put(url, data=None, **kwargs):
+    def post(self, url: str, data=None, json=None, **kwargs):
+        return self.request("post", url, data=data, json=json, **kwargs)
+
+    def put(self, url: str, data=None, **kwargs):
         return self.request('put', url, data=data, **kwargs)
 
-    def patch(url, data=None, **kwargs):
+    def patch(self, url: str, data=None, **kwargs):
         return self.request('patch', url, data=data, **kwargs)
 
-    def delete(url, data=None, **kwargs):
+    def delete(self, url: str, data=None, **kwargs):
         return self.request('delete', url, **kwargs)

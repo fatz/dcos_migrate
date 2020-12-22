@@ -1,4 +1,5 @@
-from dcos_migrate.manifest_list import ManifestList
+from dcos_migrate.system import DCOSClient, BackupList, ManifestList
+
 
 class MigratePlugin(object):
     """docstring for Migrator."""
@@ -11,14 +12,14 @@ class MigratePlugin(object):
     def __init__(self):
         pass
 
-    def backup(self, DCOSClient, **kwargs):
+    def backup(self, client: DCOSClient, **kwargs) -> BackupList:
         pass
 
-    def backup_data(self, DCOSClient, **kwargs):
+    def backup_data(self, client: DCOSClient, **kwargs):
         pass
 
-    def migrate(self, backupList, manifestList, **kwargs):
+    def migrate(self, backupList: BackupList, manifestList: ManifestList, **kwargs) -> ManifestList:
         pass
 
-    def migrate_data(self, backupList, manifestList, **kwargs):
+    def migrate_data(self, backupList: BackupList, manifestList: ManifestList, **kwargs):
         pass

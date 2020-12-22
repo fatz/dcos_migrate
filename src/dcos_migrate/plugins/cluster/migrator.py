@@ -1,4 +1,4 @@
-from dcos_migrate.migrator import Migrator
+from dcos_migrate.system import Migrator
 
 class ClusterMigrator(Migrator):
     """docstring for SecretsMigrator."""

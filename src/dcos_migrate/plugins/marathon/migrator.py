@@ -1,6 +1,7 @@
-from dcos_migrate.migrator import Migrator
+from dcos_migrate.system import Migrator
 from kubernetes.client.models import V1Deployment, V1ObjectMeta, V1Secret
 from random import randrange
+
 
 class MarathonMigrator(Migrator):
     """docstring for MarathonMigrator."""
@@ -22,7 +23,7 @@ class MarathonMigrator(Migrator):
     @staticmethod
     def parse_id(id):
         id = id.replace('_', '-')
-        return '.'.join(reversed(list(filter(None,id.split('/')))))
+        return '.'.join(reversed(list(filter(None, id.split('/')))))
 
     def container_portmappings(self, key, value={}):
         p = 0

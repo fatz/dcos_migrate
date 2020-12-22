@@ -1,4 +1,4 @@
-from dcos_migrate.migrator import Migrator
+from dcos_migrate.system import Migrator
 from kubernetes.client.models import V1Secret, V1ObjectMeta
 from base64 import b64encode
 
