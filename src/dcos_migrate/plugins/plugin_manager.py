@@ -5,7 +5,6 @@ import inspect
 import dcos_migrate.plugins
 
 
-
 def is_plugin(object):
     return (inspect.isclass(object)
             and issubclass(object, dcos_migrate.plugins.plugin.MigratePlugin)
@@ -20,9 +19,18 @@ def get_dependency_batches(plugins, depattr):
     ]
     """
     batches = []
-    p_deps = dict((p.plugin_name, set(getattr(p, depattr))) for p in plugins.values())
+    p_deps = {}
+    # build a map of plugin names and assign it the
+    # list of dependencies in `depattr`
+    for p in plugins.values():
+        p_deps[p.plugin_name] = getattr(p, depattr)
+
     while p_deps:
-        nodeps = {name for name, deps in p_deps.items() if not deps}
+        nodeps = []
+        for name, deps in p_deps.items():
+            if not deps:
+                nodeps.append(name)
+
         if not nodeps:
             raise ValueError("Circular plugin dependency")
 
@@ -31,7 +39,8 @@ def get_dependency_batches(plugins, depattr):
         for deps in p_deps.values():
             deps.difference_update(nodeps)
 
-        batches.append(plugins[name] for name in nodeps)
+        for name in nodeps:
+            batches.append(plugins[name])
 
     return batches
 
