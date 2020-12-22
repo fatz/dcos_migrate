@@ -3,6 +3,7 @@ from dcos_migrate.plugins.cluster import ClusterPlugin
 from dcos_migrate.plugins.secret import SecretPlugin
 from dcos_migrate.plugins.marathon import MarathonPlugin
 import pytest
+from pprint import pformat
 
 
 def test_auto_discovery():
@@ -13,7 +14,7 @@ def test_auto_discovery():
     assert "secret" in pm.plugins.keys()
 
 
-@pytest.mark.xfail(reason="Dependency management not fully working")
+# @pytest.mark.xfail(reason="Dependency management not fully working")
 def test_dependencies():
     pm = PluginManager(plugins={
         'cluster': ClusterPlugin,
