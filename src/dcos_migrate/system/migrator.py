@@ -1,6 +1,7 @@
 import json
 from jsonpath_ng.ext import parse
-from dcos_migrate.system import Manifest
+from .manifest import Manifest
+
 
 class Migrator(object):
     """docstring for Migrator."""
