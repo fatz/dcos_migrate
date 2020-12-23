@@ -11,13 +11,9 @@ class Migrator(object):
         self.path = path
         self.object = object
         self.migrations = migrations
-        self.manifest = Manifest('./foo/bar')
+        self.manifest = Manifest('', '')
 
         self.translate = {}
-
-        if path is not None:
-            with open(path) as f:
-                self.object = json.load(f)
 
     def valid(self):
         """Returns True if self.object is what we expect"""
@@ -31,3 +27,5 @@ class Migrator(object):
             expr = parse(k)
             for match in expr.find(self.object):
                 v(match.full_path, match.value)
+
+        return True

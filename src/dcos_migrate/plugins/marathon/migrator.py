@@ -1,4 +1,4 @@
-from dcos_migrate.system import Migrator
+from dcos_migrate.system import Migrator, Manifest
 from kubernetes.client.models import V1Deployment, V1ObjectMeta, V1Secret
 from random import randrange
 
@@ -15,6 +15,7 @@ class MarathonMigrator(Migrator):
         }
         self.appid = ""
         self.appid_annotation = "migrate.dcos.io/marathon/appid"
+        self.manifest = Manifest(pluginName="marathon")
 
     def get_deployment(self):
         return self.manifest.find_by_annotation(annotation=self.appid_annotation,
@@ -41,6 +42,7 @@ class MarathonMigrator(Migrator):
         self.appid = value
         m = V1Deployment(metadata=metadata)
 
+        self.manifest.name=value
         self.manifest.append(m)
         self.deployment_name = value
 

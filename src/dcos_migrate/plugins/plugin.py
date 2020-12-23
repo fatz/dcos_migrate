@@ -12,7 +12,7 @@ class MigratePlugin(object):
     def __init__(self):
         pass
 
-    def backup(self, client: DCOSClient, **kwargs) -> BackupList:
+    def backup(self, client: DCOSClient, backupList: BackupList, **kwargs) -> BackupList:
         pass
 
     def backup_data(self, client: DCOSClient, **kwargs):

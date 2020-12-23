@@ -20,7 +20,8 @@ class DCOSMigrate(object):
             # each batch could also be executed in parallel.
             # But for not just start sequencial
             for plugin in batch:
-                blist = plugin.backup(DCOSClient=self.client)
+                blist = plugin.backup(
+                    DCOSClient=self.client, backupList=self.backup_list)
                 self.backup_list.extend(blist)
 
     def backup_data(self, pluginName=None):

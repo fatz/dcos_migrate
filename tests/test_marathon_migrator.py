@@ -1,4 +1,5 @@
 from dcos_migrate.plugins.marathon import MarathonMigrator
+import json
 
 
 def test_id_parse():
@@ -7,8 +8,12 @@ def test_id_parse():
 
 
 def test_simple():
-    m = MarathonMigrator(path="tests/examples/simple.json")
+    with open('tests/examples/simple.json') as json_file:
+        data = json.load(json_file)
 
-    m.migrate()
+        m = MarathonMigrator(object=data)
 
-    assert m.manifest.resources[0].metadata.name == 'predictionio-server.group1'
+        mres = m.migrate()
+
+        assert mres is not None
+        assert m.manifest[0].metadata.name == 'predictionio-server.group1'

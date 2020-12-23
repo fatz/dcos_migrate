@@ -1,6 +1,7 @@
 from dcos_migrate.plugins.plugin import MigratePlugin
 from dcos_migrate.plugins.cluster import ClusterPlugin
 from dcos_migrate.plugins.secret import SecretPlugin
+from dcos_migrate.system import DCOSClient, BackupList, Backup
 
 
 class MarathonPlugin(MigratePlugin):
@@ -11,3 +12,12 @@ class MarathonPlugin(MigratePlugin):
 
     def __init__(self):
         super(MarathonPlugin, self).__init__()
+
+    def backup(self, client: DCOSClient, **kwargs) -> BackupList:
+        bl = BackupList()
+        apps = client.get("{}/marathon/v2/apps".format(client.dcos_url)).json()
+        for app in apps:
+            bl.append(Backup(pluginName=self.plugin_name,
+                             backupName=app['id'], data=app))
+
+        return bl
