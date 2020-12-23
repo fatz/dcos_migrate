@@ -1,16 +1,28 @@
+import yaml
+
+
 class Manifest(list):
     """docstring for Manifest."""
 
-    def __init__(self, path):
+    def __init__(self, pluginName: str, backupName: str, data={},
+                 extension='yaml'):
         super(Manifest, self).__init__()
+        self._plugin_name = pluginName
+        self._name = backupName
+        self._data = data
+        self._extension = extension
+        self._serializer = self.dump
+        self._deserializer = yaml.load_all
+
         self.resources = []
         filePath = path
 
-    def to_yaml(self):
-        pass
+    def dump(self) -> str:
+        docs = []
+        for d in self:
+            docs.append(yaml.dump(d))
 
-    def append(self, object):
-        self.resources.append(object)
+        return '\n---\n'.join(docs)
 
     def find_resource_by_name(self, name):
         for r in self.resources:
