@@ -7,11 +7,19 @@ class Backup(object):
     def __init__(self, pluginName: str, backupName: str, data={}, extension='json'):
         super(Backup, self).__init__()
         self._plugin_name = pluginName
+        if "/" in backupName:
+            raise AttributeError(
+                "backupName {} contains not allowed '/'".format(backupName))
         self._name = backupName
         self._data = data
         self._extension = extension
         self._serializer = json.dumps
         self._deserializer = json.loads
+
+    @staticmethod
+    def renderBackupName(name: str) -> str:
+        # replace path with dashes
+        return "-".join(list(filter(None, name.split("/"))))
 
     @property
     def plugin_name(self) -> str:

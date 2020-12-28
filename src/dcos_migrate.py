@@ -27,6 +27,8 @@ class DCOSMigrate(object):
                 if blist:
                     self.backup_list.extend(blist)
 
+        self.backup_list.store()
+
     def backup_data(self, pluginName=None):
         # for batch in self.pm.backup_batch:
         #     # each batch could also be executed in parallel.

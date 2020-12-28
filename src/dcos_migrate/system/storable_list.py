@@ -34,12 +34,11 @@ class StorableList(list):
             data = b.serialize()
 
             if not self._dry:
-                os.makedirs(path)
+                os.makedirs(path, exist_ok=True)
 
                 with open(filepath, 'wt', encoding='utf-8') as f:
                     f.write(data)
                     f.close()
-                    return True
 
             out[filepath] = data
 

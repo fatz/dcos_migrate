@@ -85,6 +85,6 @@ class SecretPlugin(MigratePlugin):
                 secData = sec.get(path, key)
 
                 backupList.append(
-                    Backup(self.plugin_name, path+key, data=secData))
+                    Backup(self.plugin_name, Backup.renderBackupName(path+key), data=secData))
 
         return backupList

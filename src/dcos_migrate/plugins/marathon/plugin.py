@@ -18,6 +18,6 @@ class MarathonPlugin(MigratePlugin):
         apps = client.get("{}/marathon/v2/apps".format(client.dcos_url)).json()
         for app in apps['apps']:
             bl.append(Backup(pluginName=self.plugin_name,
-                             backupName=app['id'], data=app))
+                             backupName=Backup.renderBackupName(app['id']), data=app))
 
         return bl
