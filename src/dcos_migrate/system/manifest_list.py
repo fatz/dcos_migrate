@@ -6,7 +6,7 @@ class ManifestList(StorableList):
     """docstring for ManifestList."""
 
     def __init__(self, dry=False, path='./dcos-migrate/migrate'):
-        super(BackupList, self).__init__(path)
+        super(ManifestList, self).__init__(path)
         self._dry = dry
 
     def find_manifest_by_name(self, name):

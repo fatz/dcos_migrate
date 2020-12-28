@@ -16,7 +16,7 @@ class MarathonPlugin(MigratePlugin):
     def backup(self, client: DCOSClient, **kwargs) -> BackupList:
         bl = BackupList()
         apps = client.get("{}/marathon/v2/apps".format(client.dcos_url)).json()
-        for app in apps:
+        for app in apps['apps']:
             bl.append(Backup(pluginName=self.plugin_name,
                              backupName=app['id'], data=app))
 

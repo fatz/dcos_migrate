@@ -8,9 +8,10 @@ class MigratePlugin(object):
     backup_data_depends = []
     migrate_depends = []
     migrate_data_ddepends = []
+    config_options = []
 
-    def __init__(self):
-        pass
+    def __init__(self, config={}):
+        self.plugin_config = config
 
     def backup(self, client: DCOSClient, backupList: BackupList, **kwargs) -> BackupList:
         pass
