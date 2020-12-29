@@ -26,7 +26,12 @@ class JenkinsPlugin(MigratePlugin):
                         b.data['labels']['DCOS_PACKAGE_OPTIONS'])
 
                     options = json.loads(options_str)
+                    data = {
+                        "packageName": b.data['labels']['DCOS_PACKAGE_NAME'],
+                        "version": b.data['labels']['DCOS_PACKAGE_VERSION'],
+                        "options": options
+                    }
 
                     bl.append(Backup(pluginName=self.plugin_name, backupName=Backup.renderBackupName(
-                        b.data['labels']['DCOS_SERVICE_NAME'])))
+                        b.data['labels']['DCOS_SERVICE_NAME'], data=data)))
         return bl
