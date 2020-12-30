@@ -33,5 +33,5 @@ class JenkinsPlugin(MigratePlugin):
                     }
 
                     bl.append(Backup(pluginName=self.plugin_name, backupName=Backup.renderBackupName(
-                        b.data['labels']['DCOS_SERVICE_NAME'], data=data)))
+                        b.data['labels']['DCOS_SERVICE_NAME']), data=data))
         return bl
