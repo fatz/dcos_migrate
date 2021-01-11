@@ -16,6 +16,7 @@ class DCOSMigrate(object):
 
     def run(self):
         self.backup()
+        self.migrate()
         pass
 
     def backup(self, pluginName=None):
@@ -50,7 +51,10 @@ class DCOSMigrate(object):
             for plugin in batch:
                 mlist = plugin.migrate(
                     backupList=self.backup_list, manifestList=self.manifest_list)
-                self.manifest_list.extend(mlist)
+                if mlist:
+                    self.manifest_list.extend(mlist)
+
+        self.manifest_list.store()
 
     def migrate_data(self, pluginName=None):
         # for batch in self.pm.migrate_batch:
