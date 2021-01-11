@@ -2,6 +2,7 @@ import os
 import glob
 from .backup import Backup
 from .manifest import Manifest
+import logging
 # pre python 3.9
 
 
@@ -33,6 +34,7 @@ class StorableList(list):
 
             data = b.serialize()
 
+            logging.debug("writing file {}".format(filepath))
             if not self._dry:
                 os.makedirs(path, exist_ok=True)
 
