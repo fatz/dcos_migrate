@@ -25,7 +25,7 @@ class DCOSClient(object):
         return http.request(method, url, toml_config=self.toml_config, **kwargs)
 
     def head(self, url: str, **kwargs):
-        return sewlf.request("head", url, **kwargs)
+        return self.request("head", url, **kwargs)
 
     def get(self, url: str, **kwargs):
         return self.request("get", url, **kwargs)
