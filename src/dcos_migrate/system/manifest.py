@@ -1,4 +1,7 @@
 import yaml
+import logging
+
+from kubernetes.client import ApiClient
 
 
 class Manifest(list):
@@ -11,31 +14,48 @@ class Manifest(list):
         self._name = manifestName
         self._data = data
         self._extension = extension
-        self._serializer = self.dump
+        self._serializer = self.dumps
         self._deserializer = yaml.load_all
 
         self.resources = []
 
-    def dump(self) -> str:
+    def dumps(self, data) -> str:
         docs = []
         for d in self:
-            docs.append(yaml.dump(d))
+            kc = ApiClient()
+            doc = yaml.dump(kc.sanitize_for_serialization(d))
+            logging.debug("Found doc: {}".format(doc))
+            docs.append(doc)
 
         return '\n---\n'.join(docs)
 
     @property
     def name(self):
-        return name._name
+        return self._name
 
     @name.setter
     def name(self, val: str):
         self._name
+
+    @property
+    def plugin_name(self) -> str:
+        return self._plugin_name
+
+    @property
+    def extension(self) -> str:
+        return self._extension
 
     def find_resource_by_name(self, name):
         for r in self.resources:
             if r.Name == name:
                 return r
         return None
+
+    def serialize(self) -> str:
+        return self._serializer(self)
+
+    def deserialize(self, data: str) -> object:
+        self._data = self._deserializer(self)
 
     def findall_by_annotation(self, annotation, value=None):
         rs = []
