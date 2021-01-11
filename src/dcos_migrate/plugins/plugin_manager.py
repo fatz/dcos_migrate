@@ -1,7 +1,7 @@
 import importlib
 import pkgutil
 import inspect
-
+import logging
 import dcos_migrate.plugins
 
 
@@ -97,6 +97,8 @@ class PluginManager(object):
             plugin_module = importlib.import_module(name)
 
             for clsName, cls in inspect.getmembers(plugin_module, is_plugin):
+                logging.info(
+                    "found plugin {} - {}".format(cls.plugin_name, clsName))
                 self.plugins[cls.plugin_name] = cls()
 
         # if we discover we need to build dependencies
@@ -105,9 +107,13 @@ class PluginManager(object):
     def build_dependencies(self):
         self.backup = get_dependency_batches(plugins=self.plugins,
                                              depattr="backup_depends")
+        logging.debug("Backup batches {}".format(self.backup))
         self.backup_data = get_dependency_batches(plugins=self.plugins,
                                                   depattr="backup_data_depends")
+        logging.debug("Backup Data batches {}".format(self.backup_data))
         self.migrate = get_dependency_batches(plugins=self.plugins,
                                               depattr="migrate_depends")
+        logging.debug("Migrate batches {}".format(self.migrate))
         self.migrate_data = get_dependency_batches(plugins=self.plugins,
                                                    depattr="migrate_data_ddepends")
+        logging.debug("Migrate Data batches {}".format(self.migrate_data))

@@ -1,4 +1,5 @@
 import click
+import logging
 from dcos_migrate.system import DCOSClient, BackupList, ManifestList
 from dcos_migrate.plugins.plugin_manager import PluginManager
 
@@ -18,10 +19,14 @@ class DCOSMigrate(object):
         pass
 
     def backup(self, pluginName=None):
+        logging.info("Calling {} Backup Batches".format(
+            len(self.pm.backup_batch)))
         for batch in self.pm.backup_batch:
             # each batch could also be executed in parallel.
             # But for not just start sequencial
             for plugin in batch:
+                logging.info(
+                    "Calling backup for plugin {}".format(plugin.plugin_name))
                 blist = plugin.backup(
                     client=self.client, backupList=self.backup_list)
                 if blist:
@@ -62,4 +67,5 @@ class DCOSMigrate(object):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     DCOSMigrate().run()
