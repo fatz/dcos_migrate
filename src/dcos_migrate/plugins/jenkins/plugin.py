@@ -11,7 +11,7 @@ class JenkinsPlugin(MigratePlugin):
     """docstring for JenkinsPlugin."""
     plugin_name = "jenkins"
 
-    depends_backup = [MarathonPlugin.plugin_name]
+    backup_depends = [MarathonPlugin.plugin_name]
 
     def __init__(self):
         super(JenkinsPlugin, self).__init__()
