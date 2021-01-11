@@ -19,7 +19,10 @@ class BackupList(StorableList):
         return newList
 
     def backup(self, pluginName: str, backupName: str):
-        pass
+        for b in self.backups(pluginName=pluginName):
+            if b.name == backupName:
+                return b
+        return None
 
     def match_jsonpath(self, jsonPath):
         bl = BackupList()
