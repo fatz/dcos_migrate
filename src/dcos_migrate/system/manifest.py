@@ -23,9 +23,15 @@ class Manifest(list):
         docs = []
         for d in self:
             kc = ApiClient()
-            doc = yaml.dump(kc.sanitize_for_serialization(d))
-            logging.debug("Found doc: {}".format(doc))
-            docs.append(doc)
+            doc = kc.sanitize_for_serialization(d)
+            orderedDoc = {}
+            # specify the key order
+            for k in ['apiVersion', 'kind', 'metadata', 'spec', 'data']:
+                if k in doc.keys():
+                    orderedDoc[k] = doc[k]
+            document = yaml.dump(orderedDoc, sort_keys=False)
+            logging.debug("Found doc: {}".format(document))
+            docs.append(document)
 
         return '\n---\n'.join(docs)
 
