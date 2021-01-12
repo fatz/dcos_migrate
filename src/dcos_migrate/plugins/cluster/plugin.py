@@ -55,6 +55,9 @@ class ClusterPlugin(MigratePlugin):
             "migration.dcos.d2iq.com/backup-date": clusterBackup.data['BACKUP_DATE'],
         }
         cfgmap = V1ConfigMap(metadata=metadata)
+        # models do not set defaults -.-
+        cfgmap.kind = "ConfigMap"
+        cfgmap.api_version = "v1"
         cfgmap.data = {
             'MESOS_MASTER_STATE_SUMMARY_BASE64': b64encode(json.dumps(
                 clusterBackup.data['MESOS_MASTER_STATE-SUMMARY']).encode('ascii'))
