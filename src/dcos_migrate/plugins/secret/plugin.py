@@ -1,8 +1,13 @@
 from dcos_migrate.plugins.plugin import MigratePlugin
 from dcos_migrate.plugins.cluster import ClusterPlugin
-from dcos_migrate.system import DCOSClient, BackupList, Backup
+from dcos_migrate.system import DCOSClient, BackupList, Backup, Manifest, ManifestList
+
+from kubernetes.client.models import V1Secret, V1ObjectMeta
+
 import urllib
 import base64
+import logging
+from base64 import b64encode
 
 
 class DCOSSecretsService:
@@ -88,3 +93,38 @@ class SecretPlugin(MigratePlugin):
                     Backup(self.plugin_name, Backup.renderBackupName(path+key), data=secData))
 
         return backupList
+
+    def migrate(self, backupList: BackupList, manifestList: ManifestList, **kwargs) -> ManifestList:
+        ml = ManifestList()
+
+        metadata = V1ObjectMeta()
+
+        clusterManifests = manifestList.manifests(pluginName='cluster')
+        if clusterManifests:
+            # we expect a single manifest
+            if clusterManifests[0][0]:
+                # set default annotations from cluster
+                metadata.annotations = clusterManifests[0][0].metadata.annotations
+
+        for ba in backupList.backups(pluginName='secret'):
+            logging.debug("Found backup {}".format(ba))
+            b = ba.data
+            fullPath = "/".join(filter(None, [b["path"], b["key"]]))
+            name = Manifest.renderManifestName(b["key"])
+
+            metadata.annotations["migration.dcos.d2iq.com/secrets/secretpath"] = fullPath
+            metadata.name = name
+            sec = V1Secret(metadata=metadata)
+            sec.api_version = 'v1'
+            sec.kind = 'Secret'
+            sec.data = {}
+            sec.data[name] = b64encode(
+                    b['value'].encode('ascii')).decode('ascii')
+
+            manifest = Manifest(pluginName=self.plugin_name,
+                                manifestName=Manifest.renderManifestName(fullPath))
+            manifest.append(sec)
+
+            ml.append(manifest)
+
+        return ml

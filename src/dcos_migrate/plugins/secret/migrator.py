@@ -20,7 +20,7 @@ class SecretMigrator(Migrator):
     def translate_secret(self, key, value):
         fullPath = "/".join(filter(None,[self.object["path"], self.object["key"]]))
         metadata = V1ObjectMeta(name=SecretsMigrator.parse_id(value))
-        metadata.annotation["migrate.dcos.io/secrets/secretpath"] = fullPath
+        metadata.annotation["migration.dcos.d2iq.com/secrets/secretpath"] = fullPath
 
         sec = V1Secret(metadata=metadata)
         sec.data[self.object["key"]] = b64encode(self.object['value'].encode('ascii'))

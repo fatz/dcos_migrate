@@ -12,6 +12,14 @@ class ManifestList(StorableList):
     def find_manifest_by_name(self, name):
         pass
 
+    def manifests(self, pluginName: str):
+        ml = ManifestList()
+        for m in self:
+            if m.plugin_name == pluginName:
+                ml.append(m)
+
+        return ml
+
     def append_data(self, pluginName: str, backupName: str,
                     extenstion: str, data: str):
         b = Manifest(pluginName=pluginName, backupName=backupName,

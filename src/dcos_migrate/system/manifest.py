@@ -25,15 +25,16 @@ class Manifest(list):
             kc = ApiClient()
             doc = kc.sanitize_for_serialization(d)
             orderedDoc = {}
-            # specify the key order
-            for k in ['apiVersion', 'kind', 'metadata', 'spec', 'data']:
+            # specify the key order: a,k,m,s/d
+            for k in ['apiVersion', 'kind', 'metadata', 'type',
+                      'spec', 'data', 'stringData']:
                 if k in doc.keys():
                     orderedDoc[k] = doc[k]
             document = yaml.dump(orderedDoc, sort_keys=False)
             logging.debug("Found doc: {}".format(document))
             docs.append(document)
 
-        return '\n---\n'.join(docs)
+        return "---\n"+'\n---\n'.join(docs)
 
     @property
     def name(self):
@@ -62,6 +63,11 @@ class Manifest(list):
 
     def deserialize(self, data: str) -> object:
         self._data = self._deserializer(self)
+
+    @staticmethod
+    def renderManifestName(name: str) -> str:
+        # replace path with dashes
+        return "-".join(list(filter(None, name.split("/"))))
 
     def findall_by_annotation(self, annotation, value=None):
         rs = []
